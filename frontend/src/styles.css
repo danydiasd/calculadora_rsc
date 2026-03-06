@@ -19,6 +19,14 @@ body {
   margin-top: 16px;
   box-shadow: 0 1px 8px rgba(0,0,0,0.08);
 }
+.oficio-image {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  border: 1px solid #d5d9e5;
+  border-radius: 10px;
+  background: #fafbff;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -49,3 +57,9 @@ button {
 .error { color: #b10000; }
 .search-item { border-top: 1px solid #e5e8f0; padding-top: 10px; margin-top: 10px; }
 .result p { margin: 6px 0; }
+.footer {
+  margin: 24px 0 8px;
+  text-align: center;
+  color: #4a5573;
+  font-weight: 600;
+}

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
 const orientacoes = [
+  'Ofício-Circular no 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
   'SIPPAGweb: use Transparência > Documentos > Portarias e preencha interessado + palavra-chave.',
   'SEI/IFCE: na pesquisa avançada, combine nome em aspas, unidade geradora e tipo de documento.',
   'Boletim de Serviços: prefira busca no Google com "boletim de serviços" "NOME" filetype:pdf site:ifce.edu.br.',
@@ -85,6 +86,12 @@ function App() {
   return (
     <main className="container">
       <h1>RSC-PCCTAE • Busca de documentos + Calculadora</h1>
+      <p className="subtitle">Página  para cálculo RSC  e orientação de busca nominal</p>
+
+      <section className="card">
+        <h2>Documento base</h2>
+        <img className="oficio-image" src="/oficio-anexo.svg" alt="Ofício-Circular 17/2026 PROGEP IFCE" />
+      </section>
       <p className="subtitle">Página em React consumindo API Python para cálculo e orientação de busca nominal.</p>
 
       <section className="card">
@@ -159,6 +166,7 @@ function App() {
       </section>
 
       <section className="card">
+        <h2>Orientações (baseadas no Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE)</h2>
         <h2>Orientações (baseadas no ofício enviado)</h2>
         <ul>
           {orientacoes.map((item) => (
@@ -192,6 +200,8 @@ function App() {
           <p><strong>Integração MCP (SEI):</strong> {busca.integracao_mcp?.mensagem}</p>
         </section>
       )}
+
+      <footer className="footer">Página em React consumindo API Python</footer>
     </main>
   )
 }
