@@ -11,6 +11,17 @@ body {
   margin: 0 auto;
   padding: 24px;
 }
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ifce-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 .subtitle { color: #445; }
 .card {
   background: #fff;

@@ -2,6 +2,30 @@ import { useMemo, useState } from 'react'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
+const fundamentosRsc = [
+  '1.1. O RSC-PCCTAE está em tramitação no Congresso Nacional via PL nº 6.170/2025 (apensado ao PL nº 5.874/2025), no âmbito da Lei nº 11.091/2005.',
+  '1.2. O RSC-PCCTAE valoriza saberes e competências não formais decorrentes da atuação no cargo (ensino, pesquisa e extensão).',
+  '1.3. Conforme texto aprovado na Câmara: será concedido em 6 níveis; visa exclusivamente o Incentivo à Qualificação; exige comprovação documental; e será analisado por Comissão CRSC-PCCTAE em cada IFE.',
+  '1.4. Situação legislativa: aprovado na Câmara, segue para o Senado, com previsão de vigência em 01/04/2026, se sancionado.',
+  '1.5. A CNS discutiu proposta de decreto regulamentador com desdobramento de atividades computáveis para concessão.',
+]
+
+const documentosComprobatorios = [
+  'Portarias de designação para comissões, grupos de trabalho ou funções.',
+  'Atos de nomeação para chefia, direção ou assessoramento.',
+  'Certificados de participação em projetos institucionais.',
+  'Documentos relativos a ensino, pesquisa, extensão, inovação e premiações.',
+  'Publicações técnicas/científicas, relatórios de atividades, ordens de serviço, termos de designação e outros registros funcionais.',
+]
+
+const orientacoesBusca = [
+  'Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
+  '3.1 SIPPAGweb: Transparência → Documentos → Portarias; selecione ano; use Interessado + Palavra-chave (ex.: comissão, contrato).',
+  '3.2 SEI/IFCE: usar pesquisa avançada (lupa), filtros por texto, unidade geradora, assunto, assinatura, tipo de processo/documento.',
+  'Exemplo SEI: "Marcel Ribeiro" covid; unidade GABR; tipo Portaria. Testar variações como Marcel "Ribeiro Mendonça" covid.',
+  '3.3 Boletim de Serviços: Google com "boletim de serviços" "NOME" filetype:pdf e refinamento com site:ifce.edu.br.',
+  '3.4 Declarações funcionais: neste momento, priorizar documentos oficiais já publicados.',
+  '3.5 Organizar documentos no SEI em processo próprio, com índice/relação para facilitar análise da comissão.',
 const orientacoes = [
   'Ofício-Circular no 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
   'SIPPAGweb: use Transparência > Documentos > Portarias e preencha interessado + palavra-chave.',
@@ -64,6 +88,7 @@ function App() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             nome: form.nome,
+            data_inicio_servico: form.data_inicio_servico,
             palavras_chave: palavrasChave,
             unidade_geradora: form.unidade_geradora,
             tipo_documento: form.tipo_documento,
@@ -85,6 +110,36 @@ function App() {
 
   return (
     <main className="container">
+      <header className="topbar">
+        <img className="ifce-logo" src="/ifce-logo.svg" alt="Logo IFCE" />
+        <div>
+          <h1>RSC-PCCTAE • Busca de documentos + Calculadora</h1>
+          <p className="subtitle">Página para cálculo RSC e orientação de busca nominal.</p>
+        </div>
+      </header>
+
+      <section className="card">
+        <h2>Documento base : Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE</h2>
+      </section>
+
+      <section className="card">
+        <h2>Fundamentação do Ofício (itens 1.1 a 1.5)</h2>
+        <ul>
+          {fundamentosRsc.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="card">
+        <h2>Organização prévia do acervo funcional (item 2)</h2>
+        <p>Recomendação: iniciar imediatamente a organização documental para eventual pleito de RSC.</p>
+        <ul>
+          {documentosComprobatorios.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
       <h1>RSC-PCCTAE • Busca de documentos + Calculadora</h1>
       <p className="subtitle">Página  para cálculo RSC  e orientação de busca nominal</p>
 
@@ -167,6 +222,8 @@ function App() {
 
       <section className="card">
         <h2>Orientações (baseadas no Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE)</h2>
+        <ul>
+          {orientacoesBusca.map((item) => (
         <h2>Orientações (baseadas no ofício enviado)</h2>
         <ul>
           {orientacoes.map((item) => (
@@ -190,6 +247,7 @@ function App() {
       {busca && (
         <section className="card">
           <h2>Rotas de busca para "{busca.nome_consultado}"</h2>
+          <p><strong>Recorte por tempo de serviço:</strong> {busca.recorte_anos}</p>
           {busca.orientacoes_busca.map((item) => (
             <article key={item.url} className="search-item">
               <h3>{item.fonte}</h3>

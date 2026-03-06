@@ -24,6 +24,7 @@ class ScoreRequest(BaseModel):
 
 class SearchRequest(BaseModel):
     nome: str
+    data_inicio_servico: str
     palavras_chave: List[str] = Field(default_factory=list)
     unidade_geradora: Optional[str] = None
     tipo_documento: Optional[str] = None
@@ -58,16 +59,29 @@ def service_points(anos: float) -> float:
     return round(base + bonus, 2)
 
 
+
+
+def resolve_year_window(data_inicio_servico: str) -> str:
+    inicio = parse_date(data_inicio_servico)
+    ano_inicio = inicio.year
+    ano_atual = date.today().year
+    return f"{ano_inicio}-{ano_atual}"
+
 def build_search_queries(req: SearchRequest) -> List[SearchResult]:
     nome_aspas = f'"{req.nome}"'
     extra = " ".join(req.palavras_chave)
     unidade = req.unidade_geradora or "(opcional)"
     tipo = req.tipo_documento or "(opcional)"
+    recorte_anos = resolve_year_window(req.data_inicio_servico)
 
     return [
         SearchResult(
             fonte="SIPPAGweb",
             titulo="Busca de portarias no SIPPAGweb",
+            url="https://sippag-web.ifce.edu.br/portarias",
+            estrategia=(
+                f"Acessar https://sippag-web.ifce.edu.br/portarias; no campo Interessado usar {nome_aspas}; "
+                f"refinar por ano no intervalo {recorte_anos} e palavra-chave '{extra or 'comissão/contrato'}'."
             url="https://sippag-web.ifce.edu.br/boletim",
             estrategia=(
                 f"Abrir Transparência > Documentos > Portarias; pesquisar interessado {nome_aspas} "
@@ -82,6 +96,9 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
                 "?acao=publicacao_pesquisar&acao_origem=publicacao_pesquisar&id_orgao_publicacao=0&id_serie=3&rdo_data_publicacao=I"
             ),
             estrategia=(
+                f"Acessar pesquisa avançada no SEI (lupa): texto {nome_aspas} {extra}; "
+                f"unidade geradora: {unidade}; tipo de documento: {tipo}; "
+                f"aplicar recorte temporal aproximado de {recorte_anos}; testar variações com aspas."
                 f"Usar texto de pesquisa {nome_aspas} {extra}; unidade geradora: {unidade}; "
                 f"tipo de documento: {tipo}."
             ),
@@ -91,6 +108,7 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             titulo="Busca refinada em PDFs públicos",
             url="https://portal.ifce.edu.br/institucional/documentos-institucionais/boletim-de-servicos/reitoria/",
             estrategia=(
+                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra} {recorte_anos} (pode incluir SIAPE/assunto para refinar)'.strip()
                 f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra}'.strip()
             ),
         ),
@@ -111,6 +129,16 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             titulo="Boletins de 2015 em diante",
             url="https://portal.ifce.edu.br/campus/acarau/documentos-institucionais/boletins-de-servico-do-campus-acarau/2015/",
             estrategia="Verificar portarias, ordens de serviço e termos de designação.",
+        ),
+
+        SearchResult(
+            fonte="Declarações funcionais",
+            titulo="Recomendação da PROGEP",
+            url="https://portal.ifce.edu.br/institucional/documentos-institucionais/boletim-de-servicos/reitoria/",
+            estrategia=(
+                "Neste momento, priorizar documentos oficiais já publicados e evitar solicitar novas "
+                "declarações até confirmação no decreto regulamentador."
+            ),
         ),
     ]
 
@@ -188,10 +216,16 @@ def calculate(req: ScoreRequest) -> Dict[str, object]:
 
 @app.post("/api/search")
 async def search(req: SearchRequest) -> Dict[str, object]:
+    try:
+        recorte_anos = resolve_year_window(req.data_inicio_servico)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
     orientacoes = build_search_queries(req)
     mcp_data = await call_sei_mcp_prompt(req)
 
     return {
+        "recorte_anos": recorte_anos,
         "nome_consultado": req.nome,
         "orientacoes_busca": [item.model_dump() for item in orientacoes],
         "integracao_mcp": mcp_data,
