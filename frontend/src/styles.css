@@ -30,6 +30,14 @@ body {
   margin-top: 16px;
   box-shadow: 0 1px 8px rgba(0,0,0,0.08);
 }
+.oficio-image {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  border: 1px solid #d5d9e5;
+  border-radius: 10px;
+  background: #fafbff;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

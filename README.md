@@ -50,3 +50,4 @@ VITE_API_BASE=http://localhost:8000 npm run dev
 - `GET /api/health`
 - `POST /api/calculate`
 - `POST /api/search` (refina as orientações de busca por recorte de anos com base em `data_inicio_servico`)
+- `POST /api/search`

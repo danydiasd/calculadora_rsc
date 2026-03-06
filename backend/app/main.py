@@ -95,6 +95,14 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             titulo="Busca de portarias no SIPPAGweb",
             url="https://sippag-web.ifce.edu.br/portarias",
             estrategia=estrategia_sippag,
+            estrategia=(
+                f"Acessar https://sippag-web.ifce.edu.br/portarias; no campo Interessado usar {nome_aspas}; "
+                f"refinar por ano no intervalo {recorte_anos} e palavra-chave '{extra or 'comissão/contrato'}'."
+            url="https://sippag-web.ifce.edu.br/boletim",
+            estrategia=(
+                f"Abrir Transparência > Documentos > Portarias; pesquisar interessado {nome_aspas} "
+                f"e palavra-chave '{extra or 'comissão/contrato'}'."
+            ),
         ),
         SearchResult(
             fonte="SEI/IFCE",
@@ -104,12 +112,23 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
                 "?acao=publicacao_pesquisar&acao_origem=publicacao_pesquisar&id_orgao_publicacao=0&id_serie=3&rdo_data_publicacao=I"
             ),
             estrategia=estrategia_sei,
+            estrategia=(
+                f"Acessar pesquisa avançada no SEI (lupa): texto {nome_aspas} {extra}; "
+                f"unidade geradora: {unidade}; tipo de documento: {tipo}; "
+                f"aplicar recorte temporal aproximado de {recorte_anos}; testar variações com aspas."
+                f"Usar texto de pesquisa {nome_aspas} {extra}; unidade geradora: {unidade}; "
+                f"tipo de documento: {tipo}."
+            ),
         ),
         SearchResult(
             fonte="Boletim de Serviços (Google)",
             titulo="Busca refinada em PDFs públicos",
             url="https://portal.ifce.edu.br/institucional/documentos-institucionais/boletim-de-servicos/reitoria/",
             estrategia=estrategia_boletim,
+            estrategia=(
+                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra} {recorte_anos} (pode incluir SIAPE/assunto para refinar)'.strip()
+                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra}'.strip()
+            ),
         ),
         SearchResult(
             fonte="Boletim Reitoria 2018",
