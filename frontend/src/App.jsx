@@ -26,6 +26,7 @@ const orientacoesBusca = [
   '3.3 Boletim de Serviços: Google com "boletim de serviços" "NOME" filetype:pdf e refinamento com site:ifce.edu.br.',
   '3.4 Declarações funcionais: neste momento, priorizar documentos oficiais já publicados.',
   '3.5 Organizar documentos no SEI em processo próprio, com índice/relação para facilitar análise da comissão.',
+]
 const orientacoes = [
   'Ofício-Circular no 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
   'SIPPAGweb: use Transparência > Documentos > Portarias e preencha interessado + palavra-chave.',
@@ -119,10 +120,6 @@ function App() {
       </header>
 
       <section className="card">
-        <h2>Documento base : Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE</h2>
-      </section>
-
-      <section className="card">
         <h2>Fundamentação do Ofício (itens 1.1 a 1.5)</h2>
         <ul>
           {fundamentosRsc.map((item) => (
@@ -142,12 +139,6 @@ function App() {
       </section>
       <h1>RSC-PCCTAE • Busca de documentos + Calculadora</h1>
       <p className="subtitle">Página  para cálculo RSC  e orientação de busca nominal</p>
-
-      <section className="card">
-        <h2>Documento base</h2>
-        <img className="oficio-image" src="/oficio-anexo.svg" alt="Ofício-Circular 17/2026 PROGEP IFCE" />
-      </section>
-      <p className="subtitle">Página em React consumindo API Python para cálculo e orientação de busca nominal.</p>
 
       <section className="card">
         <h2>Dados do servidor</h2>
@@ -222,14 +213,16 @@ function App() {
 
       <section className="card">
         <h2>Orientações (baseadas no Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE)</h2>
-        <ul>
-          {orientacoesBusca.map((item) => (
-        <h2>Orientações (baseadas no ofício enviado)</h2>
+        {orientacoesBusca.map((item) => (
+          <>
+          <h2>Orientações (baseadas no ofício enviado)</h2>
         <ul>
           {orientacoes.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
+         </>
+          ))}
       </section>
 
       {resultado && (
