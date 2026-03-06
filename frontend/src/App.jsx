@@ -92,6 +92,7 @@ function App() {
         <h2>Documento base</h2>
         <img className="oficio-image" src="/oficio-anexo.svg" alt="Ofício-Circular 17/2026 PROGEP IFCE" />
       </section>
+      <p className="subtitle">Página em React consumindo API Python para cálculo e orientação de busca nominal.</p>
 
       <section className="card">
         <h2>Dados do servidor</h2>
@@ -166,6 +167,7 @@ function App() {
 
       <section className="card">
         <h2>Orientações (baseadas no Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE)</h2>
+        <h2>Orientações (baseadas no ofício enviado)</h2>
         <ul>
           {orientacoes.map((item) => (
             <li key={item}>{item}</li>
