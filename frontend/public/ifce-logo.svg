@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="IFCE">
+  <rect width="128" height="128" rx="18" fill="#ffffff"/>
+  <circle cx="26" cy="24" r="11" fill="#d7261e"/>
+  <rect x="14" y="40" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="42" y="40" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="70" y="40" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="14" y="68" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="42" y="68" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="70" y="68" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="14" y="96" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="42" y="96" width="24" height="24" rx="4" fill="#1f9d47"/>
+  <rect x="70" y="96" width="24" height="24" rx="4" fill="#1f9d47"/>
+</svg>
