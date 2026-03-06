@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+  <rect width="1200" height="1600" fill="#ffffff"/>
+  <rect x="40" y="40" width="1120" height="1520" fill="#f8f8f8" stroke="#d0d0d0"/>
+  <text x="80" y="120" font-family="Arial" font-size="46" fill="#111">Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE</text>
+  <text x="80" y="200" font-family="Arial" font-size="30" fill="#333">Imagem de referência inserida na interface.</text>
+  <text x="80" y="250" font-family="Arial" font-size="28" fill="#333">Substitua este arquivo pelo anexo oficial (SEI) para exibição integral.</text>
+  <line x1="80" y1="300" x2="1120" y2="300" stroke="#bcbcbc"/>
+  <text x="80" y="360" font-family="Arial" font-size="26" fill="#555">Conteúdo do documento (pré-visualização).</text>
+</svg>
