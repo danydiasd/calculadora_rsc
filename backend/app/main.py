@@ -82,6 +82,10 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             estrategia=(
                 f"Acessar https://sippag-web.ifce.edu.br/portarias; no campo Interessado usar {nome_aspas}; "
                 f"refinar por ano no intervalo {recorte_anos} e palavra-chave '{extra or 'comissão/contrato'}'."
+            url="https://sippag-web.ifce.edu.br/boletim",
+            estrategia=(
+                f"Abrir Transparência > Documentos > Portarias; pesquisar interessado {nome_aspas} "
+                f"e palavra-chave '{extra or 'comissão/contrato'}'."
             ),
         ),
         SearchResult(
@@ -95,6 +99,8 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
                 f"Acessar pesquisa avançada no SEI (lupa): texto {nome_aspas} {extra}; "
                 f"unidade geradora: {unidade}; tipo de documento: {tipo}; "
                 f"aplicar recorte temporal aproximado de {recorte_anos}; testar variações com aspas."
+                f"Usar texto de pesquisa {nome_aspas} {extra}; unidade geradora: {unidade}; "
+                f"tipo de documento: {tipo}."
             ),
         ),
         SearchResult(
@@ -103,6 +109,7 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             url="https://portal.ifce.edu.br/institucional/documentos-institucionais/boletim-de-servicos/reitoria/",
             estrategia=(
                 f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra} {recorte_anos} (pode incluir SIAPE/assunto para refinar)'.strip()
+                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra}'.strip()
             ),
         ),
         SearchResult(
