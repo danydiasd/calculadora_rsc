@@ -53,12 +53,9 @@ def parse_date(value: str) -> date:
 
 
 def service_points(anos: float) -> float:
-    # Fórmula simples de referência: 1 ponto por ano + bônus após 10 anos.
     base = anos
     bonus = max(0.0, (anos - 10) * 0.5)
     return round(base + bonus, 2)
-
-
 
 
 def resolve_year_window(data_inicio_servico: str) -> str:
@@ -67,12 +64,14 @@ def resolve_year_window(data_inicio_servico: str) -> str:
     ano_atual = date.today().year
     return f"{ano_inicio}-{ano_atual}"
 
+
 def build_search_queries(req: SearchRequest) -> List[SearchResult]:
     nome_aspas = f'"{req.nome}"'
-    extra = " ".join(req.palavras_chave)
+    extra = " ".join(req.palavras_chave).strip()
     unidade = req.unidade_geradora or "(opcional)"
     tipo = req.tipo_documento or "(opcional)"
     recorte_anos = resolve_year_window(req.data_inicio_servico)
+    consulta_base = " ".join([nome_aspas, extra]).strip()
 
     return [
         SearchResult(
@@ -82,25 +81,25 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             estrategia=(
                 f"Acessar https://sippag-web.ifce.edu.br/portarias; no campo Interessado usar {nome_aspas}; "
                 f"refinar por ano no intervalo {recorte_anos} e palavra-chave '{extra or 'comissão/contrato'}'."
-            url="https://sippag-web.ifce.edu.br/boletim",
-            estrategia=(
-                f"Abrir Transparência > Documentos > Portarias; pesquisar interessado {nome_aspas} "
-                f"e palavra-chave '{extra or 'comissão/contrato'}'."
             ),
         ),
         SearchResult(
             fonte="SEI/IFCE",
-            titulo="Pesquisa avançada no SEI",
+            titulo="Pesquisa pública de publicações no SEI",
             url=(
-                "https://sei.ifce.edu.br/sei/publicacoes/controlador_publicacoes.php"
-                "?acao=publicacao_pesquisar&acao_origem=publicacao_pesquisar&id_orgao_publicacao=0&id_serie=3&rdo_data_publicacao=I"
+                "https://sei.ifce.edu.br/sei/publicacoes/controlador_publicacoes.php?"
+                "acao=publicacao_pesquisar&acao_origem=publicacao_pesquisar&id_orgao_publicacao=0&"
+                "rdo_data_publicacao=I#ancoraBarraPesquisa"
             ),
             estrategia=(
-                f"Acessar pesquisa avançada no SEI (lupa): texto {nome_aspas} {extra}; "
-                f"unidade geradora: {unidade}; tipo de documento: {tipo}; "
-                f"aplicar recorte temporal aproximado de {recorte_anos}; testar variações com aspas."
-                f"Usar texto de pesquisa {nome_aspas} {extra}; unidade geradora: {unidade}; "
-                f"tipo de documento: {tipo}."
+                f"Abrir a busca pública do SEI e preencher o campo 'Texto para Pesquisa:' com {consulta_base}. "
+                "Automação Playwright (https://playwright.dev/): page.goto(URL), "
+                "page.get_by_label('Texto para Pesquisa:').fill(consulta), page.get_by_role('button', "
+                "name='Pesquisar').click(). "
+                "Estratégias suportadas no texto: palavras/siglas/números; expressão entre aspas duplas; "
+                "coringa com * para parte da palavra ou número (ex.: embarg*, 201.7*); conectores E, OU e NÃO "
+                "(E é implícito quando nenhum outro conector for informado). "
+                f"Usar unidade geradora {unidade}, tipo de documento {tipo} e recorte temporal {recorte_anos} como refinamento complementar."
             ),
         ),
         SearchResult(
@@ -108,8 +107,8 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             titulo="Busca refinada em PDFs públicos",
             url="https://portal.ifce.edu.br/institucional/documentos-institucionais/boletim-de-servicos/reitoria/",
             estrategia=(
-                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra} {recorte_anos} (pode incluir SIAPE/assunto para refinar)'.strip()
-                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf site:ifce.edu.br {extra}'.strip()
+                f'Pesquisar no Google: "boletim de serviços" {nome_aspas} filetype:pdf '
+                f"site:ifce.edu.br {extra} {recorte_anos}".strip()
             ),
         ),
         SearchResult(
@@ -130,7 +129,6 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
             url="https://portal.ifce.edu.br/campus/acarau/documentos-institucionais/boletins-de-servico-do-campus-acarau/2015/",
             estrategia="Verificar portarias, ordens de serviço e termos de designação.",
         ),
-
         SearchResult(
             fonte="Declarações funcionais",
             titulo="Recomendação da PROGEP",
@@ -144,11 +142,6 @@ def build_search_queries(req: SearchRequest) -> List[SearchResult]:
 
 
 async def call_sei_mcp_prompt(req: SearchRequest) -> Dict[str, str]:
-    """
-    Integração opcional com um serviço MCP HTTP.
-    Defina SEI_MCP_URL para um endpoint compatível com prompt de busca.
-    """
-
     import os
 
     mcp_url = os.getenv("SEI_MCP_URL")

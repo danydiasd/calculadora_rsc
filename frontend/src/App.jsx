@@ -19,18 +19,10 @@ const documentosComprobatorios = [
 ]
 
 const orientacoesBusca = [
-  'Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
-  '3.1 SIPPAGweb: Transparência → Documentos → Portarias; selecione ano; use Interessado + Palavra-chave (ex.: comissão, contrato).',
-  '3.2 SEI/IFCE: usar pesquisa avançada (lupa), filtros por texto, unidade geradora, assunto, assinatura, tipo de processo/documento.',
-  'Exemplo SEI: "Marcel Ribeiro" covid; unidade GABR; tipo Portaria. Testar variações como Marcel "Ribeiro Mendonça" covid.',
-  '3.3 Boletim de Serviços: Google com "boletim de serviços" "NOME" filetype:pdf e refinamento com site:ifce.edu.br.',
-  '3.4 Declarações funcionais: neste momento, priorizar documentos oficiais já publicados.',
-  '3.5 Organizar documentos no SEI em processo próprio, com índice/relação para facilitar análise da comissão.',
-const orientacoes = [
-  'Ofício-Circular no 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE',
-  'SIPPAGweb: use Transparência > Documentos > Portarias e preencha interessado + palavra-chave.',
-  'SEI/IFCE: na pesquisa avançada, combine nome em aspas, unidade geradora e tipo de documento.',
-  'Boletim de Serviços: prefira busca no Google com "boletim de serviços" "NOME" filetype:pdf site:ifce.edu.br.',
+  'Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE.',
+  'SEI/IFCE: usar a busca pública e preencher o campo Texto para Pesquisa com nome + palavras-chave.',
+  'Na pesquisa do SEI: aceita aspas para expressão exata, * para parte de palavra/número, além de conectores E, OU e NÃO.',
+  'Automação: Playwright pode abrir a URL de busca pública e preencher automaticamente o campo Texto para Pesquisa.',
 ]
 
 function App() {
@@ -124,94 +116,34 @@ function App() {
 
       <section className="card">
         <h2>Fundamentação do Ofício (itens 1.1 a 1.5)</h2>
-        <ul>
-          {fundamentosRsc.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <ul>{fundamentosRsc.map((item) => <li key={item}>{item}</li>)}</ul>
       </section>
 
       <section className="card">
         <h2>Organização prévia do acervo funcional (item 2)</h2>
         <p>Recomendação: iniciar imediatamente a organização documental para eventual pleito de RSC.</p>
-        <ul>
-          {documentosComprobatorios.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <ul>{documentosComprobatorios.map((item) => <li key={item}>{item}</li>)}</ul>
       </section>
-      <h1>RSC-PCCTAE • Busca de documentos + Calculadora</h1>
-      <p className="subtitle">Página  para cálculo RSC  e orientação de busca nominal</p>
-
-      <section className="card">
-        <h2>Documento base</h2>
-        <img className="oficio-image" src="/oficio-anexo.svg" alt="Ofício-Circular 17/2026 PROGEP IFCE" />
-      </section>
-      <p className="subtitle">Página em React consumindo API Python para cálculo e orientação de busca nominal.</p>
 
       <section className="card">
         <h2>Dados do servidor</h2>
         <form onSubmit={calcular}>
           <div className="grid">
-            <label>
-              Nome
-              <input value={form.nome} onChange={(e) => atualizarCampo('nome', e.target.value)} required />
-            </label>
-            <label>
-              Cargo
-              <input value={form.cargo} onChange={(e) => atualizarCampo('cargo', e.target.value)} required />
-            </label>
-            <label>
-              Início no serviço público
-              <input
-                type="date"
-                value={form.data_inicio_servico}
-                onChange={(e) => atualizarCampo('data_inicio_servico', e.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Unidade geradora (SEI)
-              <input value={form.unidade_geradora} onChange={(e) => atualizarCampo('unidade_geradora', e.target.value)} />
-            </label>
-            <label>
-              Tipo de documento
-              <input value={form.tipo_documento} onChange={(e) => atualizarCampo('tipo_documento', e.target.value)} />
-            </label>
-            <label>
-              Palavra-chave 1
-              <input value={form.palavra1} onChange={(e) => atualizarCampo('palavra1', e.target.value)} />
-            </label>
-            <label>
-              Palavra-chave 2
-              <input value={form.palavra2} onChange={(e) => atualizarCampo('palavra2', e.target.value)} />
-            </label>
+            <label>Nome<input value={form.nome} onChange={(e) => atualizarCampo('nome', e.target.value)} required /></label>
+            <label>Cargo<input value={form.cargo} onChange={(e) => atualizarCampo('cargo', e.target.value)} required /></label>
+            <label>Início no serviço público<input type="date" value={form.data_inicio_servico} onChange={(e) => atualizarCampo('data_inicio_servico', e.target.value)} required /></label>
+            <label>Unidade geradora (SEI)<input value={form.unidade_geradora} onChange={(e) => atualizarCampo('unidade_geradora', e.target.value)} /></label>
+            <label>Tipo de documento<input value={form.tipo_documento} onChange={(e) => atualizarCampo('tipo_documento', e.target.value)} /></label>
+            <label>Palavra-chave 1<input value={form.palavra1} onChange={(e) => atualizarCampo('palavra1', e.target.value)} /></label>
+            <label>Palavra-chave 2<input value={form.palavra2} onChange={(e) => atualizarCampo('palavra2', e.target.value)} /></label>
           </div>
 
           <h3>Atividades para pontuação</h3>
           {atividades.map((atv, idx) => (
             <div className="atividade" key={atv.categoria}>
               <strong>{atv.categoria}</strong>
-              <label>
-                Quantidade
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={atv.quantidade}
-                  onChange={(e) => atualizarAtividade(idx, 'quantidade', e.target.value)}
-                />
-              </label>
-              <label>
-                Pontos/unit
-                <input
-                  type="number"
-                  min="0"
-                  step="0.5"
-                  value={atv.pontos_unitarios}
-                  onChange={(e) => atualizarAtividade(idx, 'pontos_unitarios', e.target.value)}
-                />
-              </label>
+              <label>Quantidade<input type="number" min="0" step="1" value={atv.quantidade} onChange={(e) => atualizarAtividade(idx, 'quantidade', e.target.value)} /></label>
+              <label>Pontos/unit<input type="number" min="0" step="0.5" value={atv.pontos_unitarios} onChange={(e) => atualizarAtividade(idx, 'pontos_unitarios', e.target.value)} /></label>
             </div>
           ))}
 
@@ -222,14 +154,7 @@ function App() {
 
       <section className="card">
         <h2>Orientações (baseadas no Ofício-Circular nº 17/2026/GAB-PROGEP/PROGEP/REITORIA-IFCE)</h2>
-        <ul>
-          {orientacoesBusca.map((item) => (
-        <h2>Orientações (baseadas no ofício enviado)</h2>
-        <ul>
-          {orientacoes.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <ul>{orientacoesBusca.map((item) => <li key={item}>{item}</li>)}</ul>
       </section>
 
       {resultado && (
